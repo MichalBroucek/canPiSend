@@ -5,7 +5,7 @@ import subprocess
 import canSend
 from src import param
 from src import candriver
-from src import file_io
+from src import read_db
 from src.eld_simulation import ELD_simulation
 from src.eld_msg_group import ELD_msg_group
 
@@ -199,7 +199,7 @@ class CanSimulator:
         """
         Send messages specified in text file
         """
-        msg_group_list = file_io.read_messages_from_file(file_name)
+        msg_group_list = read_db.read_messages_from_file(file_name)
 
         for msg_group in msg_group_list:
             for one_msg in msg_group.messages:
