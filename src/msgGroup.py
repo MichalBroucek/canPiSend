@@ -1,7 +1,4 @@
 
-progress_list = ['/', '-', '\\', '|']
-progress_id = 0
-
 
 class MsgGroup:
     """
@@ -26,8 +23,11 @@ class Msg:
     def __init__(self, can_message, clc_time):
         self.message = can_message              # CAN Message
         self.cycle_time = clc_time              # CAN Message cycle time
-        self.progress_character = "-"           # Character signalized message activity
+        self.type = 's'                         # CAN Message type: r=receive, s=send
+        self.progress_character = "/"           # Character signalized message activity
         self.activity_since_lasttime = True
+        self.progress_list = ['/', '-', '\\', '|']
+        self.progress_id = 0
 
     def get_progress(self):
         """
@@ -35,14 +35,14 @@ class Msg:
         :return: next character from progress list if msg was updated
         """
         if self.activity_since_lasttime:
-            global progress_id
-            temp_id = progress_id
-            progress_id += 1
-            if progress_id > 3:
-                progress_id = 0
-            return progress_list[temp_id]
+            temp_id = self.progress_id
+            self.progress_id += 1
+            if self.progress_id > 3:
+                self.progress_id = 0
+            self.progress_character = self.progress_list[temp_id]
         else:
-            return progress_list[progress_id]
+            self.progress_character = self.progress_list[self.progress_id]
+        return self.progress_character
 
     def print_msg(self):
         data_str = "{0:x}".format(self.message.data[0]) + " {0:x}".format(self.message.data[1]) + \
